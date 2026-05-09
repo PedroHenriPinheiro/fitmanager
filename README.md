@@ -234,8 +234,6 @@ fitmanager/
 
 * Cadastro de alunos
 * Controle de instrutores
-* Gestão financeira
-* Planos e mensalidades
 * Dashboard administrativo
 
 ## Instrutor
@@ -247,8 +245,6 @@ fitmanager/
 ## Aluno
 
 * Visualizar treinos
-* Consultar mensalidades
-* Acompanhar plano
 
 ---
 
