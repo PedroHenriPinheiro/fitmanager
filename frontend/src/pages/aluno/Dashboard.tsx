@@ -1,17 +1,10 @@
 import { useEffect, useState } from 'react'
 
 function AlunoDashboard() {
-     const [nome, setNome] = useState('');
-
-     useEffect(() => {
-          setNome('Aluno')
-     }, [nome]);
-
      return (
           <>
-               <div>
-                    Bem-vindo, {nome}!
-               </div>
+               <h1>Dashboard do aluno</h1>
+               <a href='/meu-treino'>Meu Treino</a>
           </>
      )
 }
