@@ -8,6 +8,8 @@ function Login() {
 
      const enviarPara = () => {
           if (usuario == 'aluno') navigate('/aluno-dashboard');
+          if (usuario == 'instrutor') navigate('/instrutor-dashboard');
+          if (usuario == 'gestor') navigate('/gestor-dashboard');
      };
 
      return (
