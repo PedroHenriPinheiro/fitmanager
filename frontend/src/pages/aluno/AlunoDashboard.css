@@ -80,3 +80,9 @@ body {
 .historicoItem p{
      margin:0
 }
+
+.carregando {
+     font-size: xx-large;
+     font-style: italic;
+     text-align: center;
+}
