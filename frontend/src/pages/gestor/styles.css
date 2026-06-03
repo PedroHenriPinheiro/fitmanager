@@ -20,3 +20,60 @@
 .table-row:hover {
   background-color: #f9f9f9;
 }
+
+.modal-overlay {
+  position: fixed;
+  background-color: red;
+  background: rgba(0, 0, 0, 0.836);
+  z-index:1000;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.modal {
+  background-color: white;
+  overflow: auto;
+}
+.modal-formulario {
+  margin: 2rem;
+}
+.modal h1 {
+  margin:0;
+}
+.informacoes-pessoais {
+  display: flex;
+}
+.informacoes-pessoais .dado {
+  display: flex;
+  flex-direction: column;
+}
+.contato {
+  display: flex;
+}
+.contato .dado {
+  display: flex;
+  flex-direction: column;
+}
+.dados-institucionais {
+  display: flex;
+}
+.dados-institucionais .dado {
+  display: flex;
+  flex-direction: column;
+}
+.dados-institucionais {
+  display: flex;
+}
+.dados-institucionais .dado {
+  display: flex;
+  flex-direction: column;
+}
+.botoes-acao{
+  display: flex;
+  justify-content: space-evenly;
+  gap: 1rem;
+}
+.botoes-acao button {
+  width: 100%;
+}

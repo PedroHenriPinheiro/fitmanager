@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import "./styles.css"
+import CriarAluno from './CriarAluno';
 
 const cliente = axios.create({
      baseURL: 'https://fitmanagerapi-production.up.railway.app/api/v1/',
@@ -8,6 +9,8 @@ const cliente = axios.create({
 });
 
 function GestorDashboard() {
+     const token = localStorage.getItem('token');
+
      const [alunos, setAlunos] = useState({
           total: 0,
           page: 0,
@@ -24,7 +27,11 @@ function GestorDashboard() {
 
      useEffect(() => {
           cliente
-               .get('alunos/')
+               .get('alunos/', {
+                    headers: {
+                         Authorization: `Bearer ${token}`,
+                    },
+               })
                .then((response) => {
                     setAlunos(response.data)
                })
@@ -33,7 +40,13 @@ function GestorDashboard() {
                })
 
           cliente
-               .get('instrutores/')
+               .get('instrutores/',
+                    {
+                         headers: {
+                              Authorization: `Bearer ${token}`,
+                         },
+                    }
+               )
                .then((response) => {
                     setProfessores(response.data)
                })
@@ -50,13 +63,17 @@ function GestorDashboard() {
           if (professores.items.length != 0) console.log(professores);
      }, [professores])*/}
 
+     const [isOpen, setIsOpen] = useState(false)
+
      return (
           <>
+               {isOpen && <div className='modal-overlay'><CriarAluno setIsOpen={setIsOpen} /></div>}
+
                <div>
                     <h1>UNIFOR GYM - Gerenciamento</h1>
                     <h2>Painel Administrativo</h2>
                </div>
-               
+
                <div>
                     <p>{alunos.items.length}</p>
                     <p>Alunos Ativos</p>
@@ -64,7 +81,7 @@ function GestorDashboard() {
 
                <div>
                     <h1>Ações Rápidas</h1>
-                    <button>Novo Aluno</button>
+                    <button onClick={() => setIsOpen(true)}>Novo Aluno</button>
                     <button>Novo Professor</button>
                </div>
 
