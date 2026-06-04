@@ -9,9 +9,15 @@ const cliente = axios.create({
 });
 
 function GestorDashboard() {
+     /* flags de carregamento e erro de requisição */
      const [isLoading, setIsLoading] = useState<boolean>(true);
      const [error, setError] = useState<string | null>(null);
 
+     /* flags de open/close e tipo do modal */
+     const [isOpen, setIsOpen] = useState(false)
+     const [tipo, setTipo] = useState('')
+
+     /* resgate do token JWT */
      const token = localStorage.getItem('token');
 
      const [alunos, setAlunos] = useState({
@@ -28,7 +34,9 @@ function GestorDashboard() {
      const [pesquisaAluno, setPesquisaAluno] = useState('')
      const [pesquisaProfessor, setPesquisaProfessor] = useState('')
 
-     useEffect(() => {
+     const carregar = () => {
+          setIsLoading(true)
+
           const headers = { Authorization: `Bearer ${token}` };
 
           Promise.all([
@@ -45,6 +53,33 @@ function GestorDashboard() {
                .finally(() => {
                     setIsLoading(false);
                });
+     }
+
+     const deletar = (id, cargo) => {
+          if (cargo !== 2 && cargo !== 3) {
+               console.log("Cargo inválido: " + cargo);
+               return;
+          }
+
+          const endpoint = cargo === 2 ? `/instrutores/${id}` : `/alunos/${id}`;
+          //console.log("deletando usuário de cargo " + cargo + " e id " + id+" pelo endpoint"+endpoint);
+
+          cliente.delete(endpoint, {
+               headers: {
+                    Authorization: `Bearer ${token}`,
+               },
+          })
+          .then((response) => {
+               console.log("Sucesso:", response)
+               carregar()
+          })
+          .catch((error) => {
+               console.error('Erro:', error);
+          });
+     };
+
+     useEffect(() => {
+          carregar()
      }, []);
 
      {/* useEffect(() => {
@@ -54,9 +89,6 @@ function GestorDashboard() {
      {/*useEffect(() => {
           if (professores.items.length != 0) console.log(professores);
      }, [professores])*/}
-
-     const [isOpen, setIsOpen] = useState(false)
-     const [tipo, setTipo] = useState('')
 
      if (isLoading) return (<h1>Carregando...</h1>)
      if (error) return (<p>{error}</p>)
@@ -117,7 +149,7 @@ function GestorDashboard() {
                               <div className="table-row" role="row" key={item.id}>
                                    <div role="cell">{item.nomeCompleto}</div>
                                    <div role="cell">{item.matricula}</div>
-                                   <div role="cell"><a href='#'>Editar</a></div>
+                                   <div role="cell"><button>Editar</button> <button onClick={() => deletar(item.id, item.cargoId)}>Deletar</button></div>
                               </div>
                          ))}
                     </div>
@@ -146,7 +178,7 @@ function GestorDashboard() {
                               <div className="table-row" role="row" key={item.id}>
                                    <div role="cell">{item.nomeCompleto}</div>
                                    <div role="cell">{item.matricula}</div>
-                                   <div role="cell"><a href='#'>Editar</a></div>
+                                   <div role="cell"><button>Editar</button> <button onClick={() => deletar(item.id, item.cargoId)}>Deletar</button></div>
                               </div>
                          ))}
                     </div>
