@@ -70,18 +70,20 @@ function GestorDashboard() {
                     </div>
                }
 
-               <div>
+               <div className='header'>
                     <h1>UNIFOR GYM - Gerenciamento</h1>
                     <h2>Painel Administrativo</h2>
                </div>
+               
 
-               <div>
-                    <p>{alunos.items.length}</p>
-                    <p>Alunos Ativos</p>
+               <div className='card'>
+                    <h1>{alunos.items.length}</h1>
+                    <h2>Alunos Ativos</h2>
                </div>
 
-               <div>
+               <div className='acao-rapida'>
                     <h1>Ações Rápidas</h1>
+                    <div className='acao-rapida-botoes'>
                     <button onClick={() => {
                          setTipo("aluno");
                          setIsOpen(true);
@@ -90,13 +92,15 @@ function GestorDashboard() {
                          setTipo("professor");
                          setIsOpen(true);
                     }}>Novo Professor</button>
+                    </div>
                </div>
 
-               <div>
+               <div className='alunos-ativos'>
                     <h1>Alunos Ativos</h1>
-                    <a href='#'>Ver todos</a>
+                    <div className='alunos-ativos-content'>
                     <input
                          type="search"
+                         className='barra-de-pesquisa'
                          value={pesquisaAluno}
                          onChange={(e) => setPesquisaAluno(e.target.value)}
                          placeholder="Buscar aluno por nome ou matrícula..."
@@ -117,13 +121,15 @@ function GestorDashboard() {
                               </div>
                          ))}
                     </div>
+                    </div>
                </div>
 
-               <div>
-                    <h1>Alunos Ativos</h1>
-                    <a href='#'>Ver todos</a>
+               <div className='alunos-ativos'>
+                    <h1>Professores Ativos</h1>
+                    <div className='alunos-ativos-content'>
                     <input
                          type="search"
+                         className='barra-de-pesquisa'
                          value={pesquisaProfessor}
                          onChange={(e) => setPesquisaProfessor(e.target.value)}
                          placeholder="Buscar professor por nome ou matrícula..."
@@ -143,6 +149,7 @@ function GestorDashboard() {
                                    <div role="cell"><a href='#'>Editar</a></div>
                               </div>
                          ))}
+                    </div>
                     </div>
                </div>
           </>
