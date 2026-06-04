@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import axios from 'axios';
-import "./styles.css"
+import "./Modal.css"
 
 const cliente = axios.create({
      baseURL: 'https://fitmanagerapi-production.up.railway.app/api/v1/',
      timeout: 10000,
 });
 
-function CriarAluno({ setIsOpen }) {
+function CriarAluno({ setIsOpen, tipoUsuario }) {
      const token = localStorage.getItem('token');
+     const [confirmarSenhaWarning, setConfirmarSenhaWarning] = useState('')
 
      const [payload, setPayload] = useState({
           nomeCompleto: '',
@@ -17,7 +18,12 @@ function CriarAluno({ setIsOpen }) {
           email: '',
           telefone: '',
           matricula: '',
-          idCargo: 3,
+          idCargo:
+               tipoUsuario === 'professor'
+                    ? 2
+                    : tipoUsuario === 'aluno'
+                         ? 3
+                         : 1,
           senha: '',
      });
 
@@ -30,126 +36,156 @@ function CriarAluno({ setIsOpen }) {
           }));
      };
 
+     const confirmarSenha = (e) => {
+          if (e.target.value != payload.senha) {
+               setConfirmarSenhaWarning('As senhas não coincidem.')
+          } else {
+               setConfirmarSenhaWarning('')
+          }
+     }
+
      const submitData = async () => {
+          const endpoint =
+               tipoUsuario === 'professor'
+                    ? '/instrutores'
+                    : '/alunos';
+
           try {
-               const response = await cliente.post('/alunos', payload, {
+               const response = await cliente.post(endpoint, payload, {
                     headers: {
                          Authorization: `Bearer ${token}`,
                     },
                });
 
-               console.log('Aluno cadastrado com sucesso:', response.data);
+               console.log('Usuário cadastrado com sucesso:', response.data);
           } catch (error) {
-               console.error('Erro ao cadastrar aluno:', error);
+               console.error('Erro ao cadastrar usuário:', error);
           }
      };
 
      return (
           <div className='modal'>
-               <div>
+               <div className='modal-header'>
                     <h1>Novo Cadastro</h1>
-                    <h2>Cadastrar novo aluno</h2>
+                    <h2>Cadastrar novo {tipoUsuario}</h2>
                </div>
 
-               <div className='modal-formulario'>
+               <div className='modal-main'>
 
-                    <h1>Informações Pessoais</h1>
-                    <div className='informacoes-pessoais'>
-                         <div className='dado'>
-                              <p>Nome Completo</p>
-                              <input
-                                   type="text"
-                                   name="nomeCompleto"
-                                   placeholder="Digite o nome completo"
-                                   value={payload.nomeCompleto}
-                                   onChange={handleChange}
-                              />
-                         </div>
+                    <div className='modal-section'>
+                         <h1>Informações Pessoais</h1>
+                         <div className='informacoes-pessoais'>
+                              <div className='dado'>
+                                   <p>Nome Completo</p>
+                                   <input
+                                        type="text"
+                                        name="nomeCompleto"
+                                        placeholder="Digite o nome completo"
+                                        value={payload.nomeCompleto}
+                                        onChange={handleChange}
+                                   />
+                              </div>
 
-                         <div className='dado'>
-                              <p>CPF</p>
-                              <input
-                                   type="text"
-                                   name="cpf"
-                                   placeholder="000.000.000-00"
-                                   value={payload.cpf}
-                                   onChange={handleChange}
-                              />
-                         </div>
+                              <div className='dado'>
+                                   <p>CPF</p>
+                                   <input
+                                        type="text"
+                                        name="cpf"
+                                        placeholder="000.000.000-00"
+                                        value={payload.cpf}
+                                        onChange={handleChange}
+                                   />
+                              </div>
 
-                         <div className='dado'>
-                              <p>Data de Nascimento</p>
-                              <input
-                                   type="date"
-                                   name="dataNascimento"
-                                   value={payload.dataNascimento}
-                                   onChange={handleChange}
-                              />
-                         </div>
-                    </div>
-
-                    <h1>Contato</h1>
-                    <div className='contato'>
-                         <div className='dado'>
-                              <p>E-mail</p>
-                              <input
-                                   type="email"
-                                   name="email"
-                                   placeholder="E-mail"
-                                   value={payload.email}
-                                   onChange={handleChange}
-                              />
-                         </div>
-
-                         <div className='dado'>
-                              <p>Telefone</p>
-                              <input
-                                   type="text"
-                                   name="telefone"
-                                   placeholder="Telefone"
-                                   value={payload.telefone}
-                                   onChange={handleChange}
-                              />
+                              <div className='dado'>
+                                   <p>Data de Nascimento</p>
+                                   <input
+                                        type="date"
+                                        name="dataNascimento"
+                                        value={payload.dataNascimento}
+                                        onChange={handleChange}
+                                   />
+                              </div>
                          </div>
                     </div>
 
-                    <h1>Dados Institucionais</h1>
-                    <div className='dados-institucionais'>
-                         <div className='dado'>
-                              <p>Matrícula</p>
-                              <input
-                                   type="text"
-                                   name="matricula"
-                                   placeholder="Matrícula"
-                                   value={payload.matricula}
-                                   onChange={handleChange}
-                              />
-                         </div>
-                         <div className='dado'>
-                              <p>Tipo de Usuário</p>
-                              <select
-                                   name="idCargo"
-                                   value={payload.idCargo}
-                                   onChange={handleChange}
-                              >
-                                   <option value={1}>Admin</option>
-                                   <option value={2}>Instrutor</option>
-                                   <option value={3}>Aluno</option>
-                              </select>
+                    <div className='modal-section'>
+                         <h1>Contato</h1>
+                         <div className='contato'>
+                              <div className='dado'>
+                                   <p>E-mail</p>
+                                   <input
+                                        type="email"
+                                        name="email"
+                                        placeholder="E-mail"
+                                        value={payload.email}
+                                        onChange={handleChange}
+                                   />
+                              </div>
+
+                              <div className='dado'>
+                                   <p>Telefone</p>
+                                   <input
+                                        type="text"
+                                        name="telefone"
+                                        placeholder="Telefone"
+                                        value={payload.telefone}
+                                        onChange={handleChange}
+                                   />
+                              </div>
                          </div>
                     </div>
 
-                    <h1>Senha de Acesso</h1>
-                    <div className='senha-de-acesso'>
-                         <div className='dado'>
-                              <p>Senha</p>
-                              <input
-                                   type="password"
-                                   name="senha"
-                                   placeholder="Senha"
-                                   value={payload.senha}
-                                   onChange={handleChange}
-                              />
+                    <div className='modal-section'>
+                         <h1>Dados Institucionais</h1>
+                         <div className='dados-institucionais'>
+                              <div className='dado'>
+                                   <p>Matrícula</p>
+                                   <input
+                                        type="text"
+                                        name="matricula"
+                                        placeholder="Matrícula"
+                                        value={payload.matricula}
+                                        onChange={handleChange}
+                                   />
+                              </div>
+                              <div className='dado'>
+                                   <p>Tipo de Usuário</p>
+                                   <select
+                                        name="idCargo"
+                                        value={payload.idCargo}
+                                        onChange={handleChange}
+                                   >
+                                        <option value={1}>Admin</option>
+                                        <option value={2}>Instrutor</option>
+                                        <option value={3}>Aluno</option>
+                                   </select>
+                              </div>
+                         </div>
+                    </div>
+
+                    <div className='modal-section'>
+                         <h1>Senha de Acesso</h1>
+                         <p className='confirmarSenhaWarning'>{confirmarSenhaWarning}</p>
+                         <div className='senha-de-acesso'>
+                              <div className='dado'>
+                                   <p>Senha</p>
+                                   <input
+                                        type="password"
+                                        name="senha"
+                                        placeholder="Senha"
+                                        value={payload.senha}
+                                        onChange={handleChange}
+                                   />
+                              </div>
+                              <div className='dado'>
+                                   <p>Senha</p>
+                                   <input
+                                        type="password"
+                                        placeholder="Confirmar senha"
+                                        onChange={confirmarSenha}
+                                   />
+                              </div>
                          </div>
                     </div>
                </div>
@@ -160,7 +196,7 @@ function CriarAluno({ setIsOpen }) {
                     </button>
 
                     <button onClick={submitData}>
-                         Cadastrar aluno
+                         Cadastrar {tipoUsuario}
                     </button>
                </div>
 

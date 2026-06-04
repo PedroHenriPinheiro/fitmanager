@@ -64,10 +64,11 @@ function GestorDashboard() {
      }, [professores])*/}
 
      const [isOpen, setIsOpen] = useState(false)
+     const [tipo, setTipo] = useState('')
 
      return (
           <>
-               {isOpen && <div className='modal-overlay'><CriarAluno setIsOpen={setIsOpen} /></div>}
+               {isOpen && <div className='modal-overlay'><CriarAluno setIsOpen={setIsOpen} tipoUsuario={tipo} /></div>}
 
                <div>
                     <h1>UNIFOR GYM - Gerenciamento</h1>
@@ -81,8 +82,14 @@ function GestorDashboard() {
 
                <div>
                     <h1>Ações Rápidas</h1>
-                    <button onClick={() => setIsOpen(true)}>Novo Aluno</button>
-                    <button>Novo Professor</button>
+                    <button onClick={() => {
+                         setTipo("aluno");
+                         setIsOpen(true);
+                    }}>Novo Aluno</button>
+                    <button onClick={() => {
+                         setTipo("professor");
+                         setIsOpen(true);
+                    }}>Novo Professor</button>
                </div>
 
                <div>
