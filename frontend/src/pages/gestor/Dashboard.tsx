@@ -9,6 +9,9 @@ const cliente = axios.create({
 });
 
 function GestorDashboard() {
+     const [isLoading, setIsLoading] = useState<boolean>(true);
+     const [error, setError] = useState<string | null>(null);
+
      const token = localStorage.getItem('token');
 
      const [alunos, setAlunos] = useState({
@@ -26,33 +29,22 @@ function GestorDashboard() {
      const [pesquisaProfessor, setPesquisaProfessor] = useState('')
 
      useEffect(() => {
-          cliente
-               .get('alunos/', {
-                    headers: {
-                         Authorization: `Bearer ${token}`,
-                    },
-               })
-               .then((response) => {
-                    setAlunos(response.data)
-               })
-               .catch((error) => {
-                    console.log(error.message)
-               })
+          const headers = { Authorization: `Bearer ${token}` };
 
-          cliente
-               .get('instrutores/',
-                    {
-                         headers: {
-                              Authorization: `Bearer ${token}`,
-                         },
-                    }
-               )
-               .then((response) => {
-                    setProfessores(response.data)
+          Promise.all([
+               cliente.get('alunos/', { headers }),
+               cliente.get('instrutores/', { headers }),
+          ])
+               .then(([alunosRes, instrutoresRes]) => {
+                    setAlunos(alunosRes.data);
+                    setProfessores(instrutoresRes.data);
                })
                .catch((error) => {
-                    console.error(error);
+                    setError(error.message);
                })
+               .finally(() => {
+                    setIsLoading(false);
+               });
      }, []);
 
      {/* useEffect(() => {
@@ -66,9 +58,17 @@ function GestorDashboard() {
      const [isOpen, setIsOpen] = useState(false)
      const [tipo, setTipo] = useState('')
 
+     if (isLoading) return (<h1>Carregando...</h1>)
+     if (error) return (<p>{error}</p>)
+
      return (
           <>
-               {isOpen && <div className='modal-overlay'><CriarAluno setIsOpen={setIsOpen} tipoUsuario={tipo} /></div>}
+               {
+                    isOpen &&
+                    <div className='modal-overlay'>
+                         <CriarAluno setIsOpen={setIsOpen} tipoUsuario={tipo} />
+                    </div>
+               }
 
                <div>
                     <h1>UNIFOR GYM - Gerenciamento</h1>

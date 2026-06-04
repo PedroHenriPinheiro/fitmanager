@@ -45,6 +45,8 @@ function CriarAluno({ setIsOpen, tipoUsuario }) {
      }
 
      const submitData = async () => {
+          console.log(JSON.stringify(payload, null, 2))
+
           const endpoint =
                tipoUsuario === 'professor'
                     ? '/instrutores'
@@ -199,9 +201,6 @@ function CriarAluno({ setIsOpen, tipoUsuario }) {
                          Cadastrar {tipoUsuario}
                     </button>
                </div>
-
-               {/* preview */}
-               <pre>{JSON.stringify(payload, null, 2)}</pre>
           </div>
      );
 }
