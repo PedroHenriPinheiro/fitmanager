@@ -103,7 +103,7 @@ function GestorDashboard() {
                {
                     isOpen &&
                     <div className='modal-overlay'>
-                         <CriarAluno setIsOpen={setIsOpen} tipoUsuario={tipo} />
+                         <CriarAluno setIsOpen={setIsOpen} reload={carregar} tipoUsuario={tipo} />
                     </div>
                }
 

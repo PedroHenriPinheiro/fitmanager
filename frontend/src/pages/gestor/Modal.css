@@ -16,7 +16,7 @@ h2 {
 
 .modal-header {
      padding: 1rem;
-     background-color: purple;
+     background-color: #962EFF;
      color: white;
 }
 
@@ -76,7 +76,7 @@ h2 {
 
 .botoes-acao button:nth-child(2) {
      color: white;
-     background-color: purple;
+     background-color: #962EFF;
 }
 
 .botoes-acao button {

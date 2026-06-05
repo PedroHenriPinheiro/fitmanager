@@ -7,7 +7,12 @@ const cliente = axios.create({
      timeout: 10000,
 });
 
-function CriarAluno({ setIsOpen, tipoUsuario }) {
+const TIPO_USUARIO = {
+     professor: { idCargo: 2, endpoint: '/instrutores' },
+     aluno: { idCargo: 3, endpoint: '/alunos' },
+};
+
+function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
      const token = localStorage.getItem('token');
      const [confirmarSenhaWarning, setConfirmarSenhaWarning] = useState('')
 
@@ -18,12 +23,7 @@ function CriarAluno({ setIsOpen, tipoUsuario }) {
           email: '',
           telefone: '',
           matricula: '',
-          idCargo:
-               tipoUsuario === 'professor'
-                    ? 2
-                    : tipoUsuario === 'aluno'
-                         ? 3
-                         : 1,
+          idCargo: TIPO_USUARIO[tipoUsuario].idCargo,
           senha: '',
      });
 
@@ -44,25 +44,27 @@ function CriarAluno({ setIsOpen, tipoUsuario }) {
           }
      }
 
-     const submitData = async () => {
-          console.log(JSON.stringify(payload, null, 2))
+     const submitData = () => {
+          console.log(JSON.stringify(payload, null, 2));
 
-          const endpoint =
-               tipoUsuario === 'professor'
-                    ? '/instrutores'
-                    : '/alunos';
-
-          try {
-               const response = await cliente.post(endpoint, payload, {
-                    headers: {
-                         Authorization: `Bearer ${token}`,
-                    },
-               });
-
-               console.log('Usuário cadastrado com sucesso:', response.data);
-          } catch (error) {
-               console.error('Erro ao cadastrar usuário:', error);
+          const config = TIPO_USUARIO[tipoUsuario];
+          if (!config) {
+               console.error(`Tipo de usuário inválido: ${tipoUsuario}`);
+               return;
           }
+
+          cliente
+               .post(config.endpoint, payload, {
+                    headers: { Authorization: `Bearer ${token}` },
+               })
+               .then((response) => {
+                    console.log('Usuário cadastrado com sucesso:', response.data)
+                    setIsOpen(false);
+                    reload();
+               })
+               .catch((error) => {
+                    console.error('Erro ao cadastrar usuário:', error);
+               })
      };
 
      return (
@@ -158,8 +160,7 @@ function CriarAluno({ setIsOpen, tipoUsuario }) {
                                         value={payload.idCargo}
                                         onChange={handleChange}
                                    >
-                                        <option value={1}>Admin</option>
-                                        <option value={2}>Instrutor</option>
+                                        <option value={2} >Instrutor</option>
                                         <option value={3}>Aluno</option>
                                    </select>
                               </div>
@@ -201,6 +202,7 @@ function CriarAluno({ setIsOpen, tipoUsuario }) {
                          Cadastrar {tipoUsuario}
                     </button>
                </div>
+               {/*<pre>{JSON.stringify(payload, null, 2)}</pre>*/}
           </div>
      );
 }
