@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import "./styles.css"
 import CriarAluno from './CriarAluno';
+import EditarUsuario from './EditarUsuario';
 
 const cliente = axios.create({
      baseURL: 'https://fitmanagerapi-production.up.railway.app/api/v1/',
@@ -16,6 +17,10 @@ function GestorDashboard() {
      /* flags de open/close e tipo do modal */
      const [isOpen, setIsOpen] = useState(false)
      const [tipo, setTipo] = useState('')
+
+     /* flags de open/close do modal de edição de usuário e dados do usuário selecionado */
+     const [isEditarUsuarioOpen, setIsEditarUsuarioOpen] = useState(false)
+     const [usuario, setUsuario] = useState(null)
 
      /* resgate do token JWT */
      const token = localStorage.getItem('token');
@@ -102,6 +107,13 @@ function GestorDashboard() {
                     </div>
                }
 
+               {
+                    isEditarUsuarioOpen &&
+                    <div className='modal-overlay'>
+                         <EditarUsuario setIsOpen={setIsEditarUsuarioOpen} reload={carregar} usuario={usuario}/>
+                    </div>
+               }
+
                <div className='header'>
                     <h1>UNIFOR GYM - Gerenciamento</h1>
                     <h2>Painel Administrativo</h2>
@@ -145,13 +157,17 @@ function GestorDashboard() {
                               <div role="columnheader">Matrícula</div>
                               <div role="columnheader">Ações</div>
                          </div>
-                         {alunos.items.map((item) => (
-                              <div className="table-row" role="row" key={item.id}>
-                                   <div role="cell">{item.nomeCompleto}</div>
-                                   <div role="cell">{item.matricula}</div>
-                                   <div role="cell"><button>Editar</button> <button onClick={() => deletar(item.id, item.cargoId)}>Deletar</button></div>
-                              </div>
-                         ))}
+
+                              {alunos.items.map((item) => (
+                                   <div className="table-row" role="row" key={item.id}>
+                                        <div role="cell">{item.nomeCompleto}</div>
+                                        <div role="cell">{item.matricula}</div>
+                                        <div role="cell"><button onClick={() => {
+                                             setIsEditarUsuarioOpen(true);
+                                             setUsuario(item)
+                                        }}>Editar</button> <button onClick={() => deletar(item.id, item.cargoId)}>Deletar</button></div>
+                                   </div>
+                              ))}
                     </div>
                     </div>
                </div>
@@ -178,7 +194,10 @@ function GestorDashboard() {
                               <div className="table-row" role="row" key={item.id}>
                                    <div role="cell">{item.nomeCompleto}</div>
                                    <div role="cell">{item.matricula}</div>
-                                   <div role="cell"><button>Editar</button> <button onClick={() => deletar(item.id, item.cargoId)}>Deletar</button></div>
+                                   <div role="cell"><button onClick={() => {
+                                             setIsEditarUsuarioOpen(true);
+                                             setUsuario(item)
+                                        }}>Editar</button> <button onClick={() => deletar(item.id, item.cargoId)}>Deletar</button></div>
                               </div>
                          ))}
                     </div>

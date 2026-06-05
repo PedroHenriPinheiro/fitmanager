@@ -44,6 +44,11 @@ h2 {
      border-radius: 10px;
 }
 
+.dado select {
+     height: 2rem;
+     border-radius: 10px;
+}
+
 .confirmarSenhaWarning {
      color:red;
 }
