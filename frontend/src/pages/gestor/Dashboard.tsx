@@ -3,6 +3,7 @@ import axios from 'axios'
 import "./styles.css"
 import CriarAluno from './CriarAluno';
 import EditarUsuario from './EditarUsuario';
+import Confirmar from './Confirmar';
 
 const cliente = axios.create({
      baseURL: 'https://fitmanagerapi-production.up.railway.app/api/v1/',
@@ -21,6 +22,32 @@ function GestorDashboard() {
      /* flags de open/close do modal de edição de usuário e dados do usuário selecionado */
      const [isEditarUsuarioOpen, setIsEditarUsuarioOpen] = useState(false)
      const [usuario, setUsuario] = useState(null)
+
+     /* flags de open/close do modal de exclusão e dados do usuários a ser deletado */
+     const [isConfirmarOpen, setIsConfirmarOpen] = useState(false);
+     const [pendingDelete, setPendingDelete] = useState<{ id: number; cargo: number } | null>(null);
+
+     /* trata o pedido de exclusão */
+     const handleDeleteClick = (id: number, cargo: number) => {
+          setPendingDelete({ id, cargo });
+          setIsConfirmarOpen(true);
+          console.log("Deletar usuário de ID "+id+" e cargo "+cargo+"?")
+     };
+
+     /* confirma exclusão */
+     const handleConfirm = () => {
+          if (pendingDelete) {
+               deletar(pendingDelete.id, pendingDelete.cargo);
+          }
+          setIsConfirmarOpen(false);
+          setPendingDelete(null);
+     };
+
+     /* cancela exclusão */
+     const handleCancel = () => {
+          setIsConfirmarOpen(false);
+          setPendingDelete(null);
+     };
 
      /* resgate do token JWT */
      const token = localStorage.getItem('token');
@@ -114,6 +141,18 @@ function GestorDashboard() {
                     </div>
                }
 
+               {isConfirmarOpen &&
+                    <div className='modal-overlay-deletar'>
+                         <Confirmar
+                              isOpen={isConfirmarOpen}
+                              title="Tem certeza?"
+                              message="Esta ação não pode ser desfeita. Você tem certeza que deseja deletar este usuário?"
+                              onConfirm={handleConfirm}
+                              onCancel={handleCancel}
+                         />
+                    </div>
+               }
+
                <div className='header'>
                     <h1>UNIFOR GYM - Gerenciamento</h1>
                     <h2>Painel Administrativo</h2>
@@ -165,7 +204,7 @@ function GestorDashboard() {
                                         <div role="cell"><button onClick={() => {
                                              setIsEditarUsuarioOpen(true);
                                              setUsuario(item)
-                                        }}>Editar</button> <button onClick={() => deletar(item.id, item.cargoId)}>Deletar</button></div>
+                                        }}>Editar</button> <button onClick={() => handleDeleteClick(item.id, item.cargoId)}>Deletar</button></div>
                                    </div>
                               ))}
                     </div>
@@ -197,7 +236,7 @@ function GestorDashboard() {
                                    <div role="cell"><button onClick={() => {
                                              setIsEditarUsuarioOpen(true);
                                              setUsuario(item)
-                                        }}>Editar</button> <button onClick={() => deletar(item.id, item.cargoId)}>Deletar</button></div>
+                                        }}>Editar</button> <button onClick={() => handleDeleteClick(item.id, item.cargoId)}>Deletar</button></div>
                               </div>
                          ))}
                     </div>
