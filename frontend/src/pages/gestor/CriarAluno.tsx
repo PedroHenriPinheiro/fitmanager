@@ -15,6 +15,7 @@ const TIPO_USUARIO = {
 function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
      const token = localStorage.getItem('token');
      const [confirmarSenhaWarning, setConfirmarSenhaWarning] = useState('')
+     const [msg, setMsg] = useState('')
 
      const [payload, setPayload] = useState({
           nomeCompleto: '',
@@ -46,6 +47,7 @@ function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
 
      const submitData = () => {
           console.log(JSON.stringify(payload, null, 2));
+          setMsg('')
 
           const config = TIPO_USUARIO[tipoUsuario];
           if (!config) {
@@ -63,7 +65,15 @@ function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
                     reload();
                })
                .catch((error) => {
-                    console.error('Erro ao cadastrar usuário:', error);
+                    console.error('Data:', error.response.data)
+                    
+                    if (error.status === 400) {
+                         setMsg('Um ou mais campos não foram preenchidos corretamente.')
+                    } else if (error.status === 409) {
+                         setMsg(error.response.data.message)
+                    } else {
+                         setMsg('O servidor retornou um erro e o usuário não foi cadastrado.');
+                    }
                })
      };
 
@@ -191,7 +201,11 @@ function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
                               </div>
                          </div>
                     </div>
+
+                    <p style={{margin:"1rem", color:"red"}}>{msg}</p>
                </div>
+
+               
 
                <div className='botoes-acao'>
                     <button onClick={() => setIsOpen(false)}>
