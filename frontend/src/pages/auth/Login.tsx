@@ -3,6 +3,7 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { login } from "../../services/authService";
 import { useAuth } from "../../hooks/useAuth";
 import type { LoginCredentials } from "../../types/auth.types";
+import "../auth/Login.css";
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -44,32 +45,53 @@ export function LoginPage() {
   };
 
   return (
-    <div className="login-container">
-      <h1>FitManager</h1>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          name="email"
-          placeholder="E-mail"
-          value={credentials.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="senha"
-          placeholder="Senha"
-          value={credentials.senha}
-          onChange={handleChange}
-          required
-        />
+    <div className="login-page">
+      <div className="login-card">
+        <div className="login-logo">
+          <h1>FIT</h1>
+          <span>MANAGER</span>
+        </div>
 
-        {erro && <p className="erro">{erro}</p>}
+        <h2 className="login-title">Sistema de Gerenciamento</h2>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Entrando..." : "Entrar"}
-        </button>
-      </form>
+        <form onSubmit={handleLogin} className="login-form">
+          <div className="form-group">
+            <label htmlFor="email">Usuário</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              placeholder="Digite seu e-mail"
+              value={credentials.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="senha">Senha</label>
+            <input
+              id="senha"
+              type="password"
+              name="senha"
+              placeholder="Digite sua senha"
+              value={credentials.senha}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {erro && <p className="erro">{erro}</p>}
+
+          <button
+            type="submit"
+            className="login-button"
+            disabled={loading}
+          >
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
