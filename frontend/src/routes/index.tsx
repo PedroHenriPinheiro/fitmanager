@@ -1,0 +1,46 @@
+import { createBrowserRouter, Navigate } from "react-router-dom";
+import { PrivateRoute } from "../components/auth/PrivateRoutes";
+import { ROLES } from "../services/authService";
+import { LoginPage }          from "../pages/auth/Login";
+import { DashboardGestor }     from "../pages/gestor/dashboard";
+import { Dashboard } from "../pages/instrutor/dashboard";
+import { DashboardAluno }     from "../pages/aluno/dashboard";
+import { NotFound }           from "../pages/notFound/notFound";
+
+export const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+
+  {
+    path: "/",
+    element: <Navigate to="/login" replace />,
+  },
+
+  {
+    element: <PrivateRoute allowedRoles={[ROLES.ADMIN]} />,
+    children: [
+      { path: "/admin-dashboard", element: <DashboardGestor /> },
+    ],
+  },
+
+  {
+    element: <PrivateRoute allowedRoles={[ROLES.INSTRUTOR]} />,
+    children: [
+      { path: "/instrutor-dashboard", element: <Dashboard /> },
+    ],
+  },
+
+  {
+    element: <PrivateRoute allowedRoles={[ROLES.ALUNO]} />,
+    children: [
+      { path: "/aluno-dashboard", element: <DashboardAluno /> },
+    ],
+  },
+
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+]);

@@ -1,45 +1,75 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useState, type FormEvent } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
+import { login } from "../../services/authService";
+import { useAuth } from "../../hooks/useAuth";
+import type { LoginCredentials } from "../../types/auth.types";
 
-function Login() {
-     const navigate = useNavigate();
-     const [usuario, setUsuario] = useState('');
-     const [senha, setSenha] = useState('');
+export function LoginPage() {
+  const navigate = useNavigate();
+  const { isAuth, dashboardPath } = useAuth();
 
-     const enviarPara = () => {
-          if (usuario == 'aluno') navigate('/aluno-dashboard');
-          if (usuario == 'instrutor') navigate('/instrutor-dashboard');
-          if (usuario == 'gestor') navigate('/gestor-dashboard');
-     };
+  const [credentials, setCredentials] = useState<LoginCredentials>({
+    email: "",
+    senha: "",
+  });
+  const [erro, setErro] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
-     return (
-          <>
-               <div>
-                    <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Unifor_logo.svg/3840px-Unifor_logo.svg.png' width={100}>
-                    </img>
-                    <h1>Sistema de gerenciamento</h1>
-               </div>
+  if (isAuth) {
+    return <Navigate to={dashboardPath} replace />;
+  }
 
-               <div>
-                    <label htmlFor='usuario'>Usuário</label>
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setCredentials((prev) => ({ ...prev, [name]: value }));
+  };
 
-                    <input
-                         type='text'
-                         value={usuario}
-                         onChange={(e) => setUsuario(e.target.value)}
-                         required />
+  const handleLogin = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
+    setErro("");
+    setLoading(true);
 
-                    <label htmlFor='senha'>Senha</label>
+    try {
+      const { redirectTo } = await login(credentials);
+      navigate(redirectTo, { replace: true });
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setErro(err.message);
+      } else {
+        setErro("Ocorreu um erro inesperado.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                    <input type='password' required />
+  return (
+    <div className="login-container">
+      <h1>FitManager</h1>
+      <form onSubmit={handleLogin}>
+        <input
+          type="email"
+          name="email"
+          placeholder="E-mail"
+          value={credentials.email}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="password"
+          name="senha"
+          placeholder="Senha"
+          value={credentials.senha}
+          onChange={handleChange}
+          required
+        />
 
-                    <button onClick={enviarPara}>Entrar</button>
+        {erro && <p className="erro">{erro}</p>}
 
-                    <a href='/redefinir-senha'>Esqueci a senha</a>
-               </div>
-
-          </>
-     )
+        <button type="submit" disabled={loading}>
+          {loading ? "Entrando..." : "Entrar"}
+        </button>
+      </form>
+    </div>
+  );
 }
-
-export default Login
