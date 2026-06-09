@@ -6,6 +6,7 @@ import { DashboardGestor }     from "../pages/gestor/dashboard";
 import { Dashboard } from "../pages/instrutor/dashboard";
 import { DashboardAluno }     from "../pages/aluno/dashboard";
 import { NotFound }           from "../pages/notFound/notFound";
+import { GerenciarTreino } from "../pages/instrutor/treinos/GerenciarTreino";
 
 export const router = createBrowserRouter([
   {
@@ -28,7 +29,14 @@ export const router = createBrowserRouter([
   {
     element: <PrivateRoute allowedRoles={[ROLES.INSTRUTOR]} />,
     children: [
-      { path: "/instrutor-dashboard", element: <Dashboard /> },
+      {
+        path: "/instrutor-dashboard",
+        element: <Dashboard />,
+      },
+      {
+        path: "/treinos/:treinoId/editar",
+        element: <GerenciarTreino />,
+      },
     ],
   },
 
