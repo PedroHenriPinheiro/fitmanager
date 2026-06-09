@@ -17,7 +17,7 @@ function GestorDashboard() {
 
      /* flags de open/close e tipo do modal */
      const [isOpen, setIsOpen] = useState(false)
-     const [tipo, setTipo] = useState('')
+     const [tipo, setTipo] = useState(0)
 
      /* flags de open/close do modal de edição de usuário e dados do usuário selecionado */
      const [isEditarUsuarioOpen, setIsEditarUsuarioOpen] = useState(false)
@@ -168,11 +168,11 @@ function GestorDashboard() {
                     <h1>Ações Rápidas</h1>
                     <div className='acao-rapida-botoes'>
                     <button onClick={() => {
-                         setTipo("aluno");
+                         setTipo(3);
                          setIsOpen(true);
                     }}>Novo Aluno</button>
                     <button onClick={() => {
-                         setTipo("professor");
+                         setTipo(2);
                          setIsOpen(true);
                     }}>Novo Professor</button>
                     </div>

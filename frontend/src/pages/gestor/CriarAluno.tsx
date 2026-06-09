@@ -8,8 +8,8 @@ const cliente = axios.create({
 });
 
 const TIPO_USUARIO = {
-     professor: { idCargo: 2, endpoint: '/instrutores' },
-     aluno: { idCargo: 3, endpoint: '/alunos' },
+     2: { cargo: 'professor', endpoint: '/instrutores' },
+     3: { cargo: 'aluno', endpoint: '/alunos' },
 };
 
 function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
@@ -24,7 +24,7 @@ function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
           email: '',
           telefone: '',
           matricula: '',
-          idCargo: TIPO_USUARIO[tipoUsuario].idCargo,
+          idCargo: tipoUsuario,
           senha: '',
      });
 
@@ -50,6 +50,7 @@ function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
           setMsg('')
 
           const config = TIPO_USUARIO[tipoUsuario];
+          console.log('config de usuario', config)
           if (!config) {
                console.error(`Tipo de usuário inválido: ${tipoUsuario}`);
                return;
@@ -81,7 +82,7 @@ function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
           <div className='modal'>
                <div className='modal-header'>
                     <h1>Novo Cadastro</h1>
-                    <h2>Cadastrar novo {tipoUsuario}</h2>
+                    <h2>Cadastrar novo {TIPO_USUARIO[tipoUsuario].cargo}</h2>
                </div>
 
                <div className='modal-main'>
@@ -90,7 +91,7 @@ function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
                          <h1>Informações Pessoais</h1>
                          <div className='informacoes-pessoais'>
                               <div className='dado'>
-                                   <p>Nome Completo</p>
+                                   <p>Nome Completo (*)</p>
                                    <input
                                         type="text"
                                         name="nomeCompleto"
@@ -101,18 +102,18 @@ function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
                               </div>
 
                               <div className='dado'>
-                                   <p>CPF</p>
+                                   <p>CPF (*)</p>
                                    <input
                                         type="text"
                                         name="cpf"
-                                        placeholder="000.000.000-00"
+                                        placeholder="12345678901"
                                         value={payload.cpf}
                                         onChange={handleChange}
                                    />
                               </div>
 
                               <div className='dado'>
-                                   <p>Data de Nascimento</p>
+                                   <p>Data de Nascimento (*)</p>
                                    <input
                                         type="date"
                                         name="dataNascimento"
@@ -127,7 +128,7 @@ function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
                          <h1>Contato</h1>
                          <div className='contato'>
                               <div className='dado'>
-                                   <p>E-mail</p>
+                                   <p>E-mail (*)</p>
                                    <input
                                         type="email"
                                         name="email"
@@ -138,11 +139,11 @@ function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
                               </div>
 
                               <div className='dado'>
-                                   <p>Telefone</p>
+                                   <p>Telefone (*)</p>
                                    <input
                                         type="text"
                                         name="telefone"
-                                        placeholder="Telefone"
+                                        placeholder="0011112222"
                                         value={payload.telefone}
                                         onChange={handleChange}
                                    />
@@ -154,17 +155,17 @@ function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
                          <h1>Dados Institucionais</h1>
                          <div className='dados-institucionais'>
                               <div className='dado'>
-                                   <p>Matrícula</p>
+                                   <p>Matrícula (*)</p>
                                    <input
                                         type="text"
                                         name="matricula"
-                                        placeholder="Matrícula"
+                                        placeholder="1245789"
                                         value={payload.matricula}
                                         onChange={handleChange}
                                    />
                               </div>
                               <div className='dado'>
-                                   <p>Tipo de Usuário</p>
+                                   <p>Tipo de Usuário (*)</p>
                                    <select
                                         name="idCargo"
                                         value={payload.idCargo}
@@ -182,7 +183,7 @@ function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
                          <p className='confirmarSenhaWarning'>{confirmarSenhaWarning}</p>
                          <div className='senha-de-acesso'>
                               <div className='dado'>
-                                   <p>Senha</p>
+                                   <p>Senha (*)</p>
                                    <input
                                         type="password"
                                         name="senha"
@@ -213,7 +214,7 @@ function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
                     </button>
 
                     <button onClick={submitData}>
-                         Cadastrar {tipoUsuario}
+                         Cadastrar {TIPO_USUARIO[tipoUsuario].cargo}
                     </button>
                </div>
                {/*<pre>{JSON.stringify(payload, null, 2)}</pre>*/}
