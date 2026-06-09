@@ -27,7 +27,7 @@ export function Dashboard() {
   const instrutorId = user?.id ?? 0;
 
   const [alunosVinculados, setAlunosVinculados] = useState<Aluno[]>([]);
-  const [treinos, setTreinos] = useState<Treino[]>([]);
+  const [treinos, setTreinos] = useState<TreinoCompleto[]>([]);
   const [todosAlunos, setTodosAlunos] = useState<Aluno[]>([]);
 
   const [loading, setLoading] = useState(true);
@@ -114,19 +114,19 @@ export function Dashboard() {
   );
 
   async function handleDeletar(aluno: Aluno) {
-    const treino = treinos.find((t) => t.alunoId === aluno.id); // ← alunoId
+    const treino = treinos.find((t) => t.alunoId === aluno.id);
     if (!treino) { alert("Treino não encontrado."); return; }
     if (!confirm(`Remover vínculo com ${aluno.nomeCompleto}?`)) return;
     try {
-      await deletarTreino(treino.treinoId); // ← treinoId
+      await deletarTreino(treino.treinoId);
       await carregarDados();
     } catch (error) { console.error(error); }
   }
 
   function handleEditarTreino(aluno: Aluno) {
-    const treino = treinos.find((t) => t.alunoId === aluno.id); // ← alunoId
+    const treino = treinos.find((t) => t.alunoId === aluno.id); 
     if (!treino) return;
-    navigate(`/treinos/${treino.treinoId}/editar`); // ← treinoId
+    navigate(`/treinos/${treino.treinoId}/editar`); 
   }
 
   function handleAbrirModalTreino(aluno: Aluno) {
@@ -146,7 +146,7 @@ export function Dashboard() {
         }
       );
     setModalNovoTreino(false);
-    navigate(`/treinos/${data.treino.id}/editar`); // ← data.treino.id
+    navigate(`/treinos/${data.treino.id}/editar`);
   }
 
 
