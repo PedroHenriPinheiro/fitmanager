@@ -50,7 +50,7 @@ function GestorDashboard() {
      };
 
      /* resgate do token JWT */
-     const token = localStorage.getItem('token');
+     const token = localStorage.getItem('fitmanager_token');
 
      const [alunos, setAlunos] = useState({
           total: 0,

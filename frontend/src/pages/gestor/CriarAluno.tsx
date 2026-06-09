@@ -13,7 +13,7 @@ const TIPO_USUARIO = {
 };
 
 function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
-     const token = localStorage.getItem('token');
+     const token = localStorage.getItem('fitmanager_token');
      const [confirmarSenhaWarning, setConfirmarSenhaWarning] = useState('')
      const [msg, setMsg] = useState('')
 

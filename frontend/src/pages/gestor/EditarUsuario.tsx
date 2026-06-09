@@ -16,7 +16,7 @@ function EditarUsuario({ setIsOpen, reload, usuario }) {
      /* setIsOpen = função de open/close do componente */
      /* usuario = objeto com dados do usuário a ser editado */
 
-     const token = localStorage.getItem('token');
+     const token = localStorage.getItem('fitmanager_token');
 
      const [payload, setPayload] = useState({
           nomeCompleto: usuario.nomeCompleto,
