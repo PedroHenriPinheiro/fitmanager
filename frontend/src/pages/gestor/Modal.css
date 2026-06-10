@@ -1,4 +1,4 @@
-.modal {
+.modal-criar-aluno {
      width: 50%;
      margin:1rem;
      background-color: white;
@@ -9,7 +9,7 @@
      border-radius: 10px;
 }
 
-.modal h1,
+.modal-criar-aluno h1,
 h2 {
      margin: 0;
 }

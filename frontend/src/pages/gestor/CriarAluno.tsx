@@ -79,7 +79,7 @@ function CriarAluno({ setIsOpen, reload, tipoUsuario }) {
      };
 
      return (
-          <div className='modal'>
+          <div className='modal-criar-aluno'>
                <div className='modal-header'>
                     <h1>Novo Cadastro</h1>
                     <h2>Cadastrar novo {TIPO_USUARIO[tipoUsuario].cargo}</h2>
