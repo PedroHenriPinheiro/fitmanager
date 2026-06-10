@@ -90,7 +90,7 @@ h2 {
   background-color: #f9f9f9;
 }
 
-.modal-overlay {
+.modal-criar-aluno-overlay {
   position: fixed;
   background-color: red;
   background: rgba(0, 0, 0, 0.836);
