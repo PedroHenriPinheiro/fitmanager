@@ -60,7 +60,7 @@ function EditarUsuario({ setIsOpen, reload, usuario }) {
      };
 
      return (
-          <div className='modal'>
+          <div className='modal-criar-aluno'>
                <div className='modal-header'>
                     <h1>Editar Cadastro</h1>
                     <h2>Atualizar informações do usuário</h2>

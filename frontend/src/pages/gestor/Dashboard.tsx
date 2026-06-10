@@ -129,14 +129,14 @@ function GestorDashboard() {
           <>
                {
                     isOpen &&
-                    <div className='modal-overlay'>
+                    <div className='modal-criar-aluno-overlay'>
                          <CriarAluno setIsOpen={setIsOpen} reload={carregar} tipoUsuario={tipo} />
                     </div>
                }
 
                {
                     isEditarUsuarioOpen &&
-                    <div className='modal-overlay'>
+                    <div className='modal-criar-aluno-overlay'>
                          <EditarUsuario setIsOpen={setIsEditarUsuarioOpen} reload={carregar} usuario={usuario}/>
                     </div>
                }
