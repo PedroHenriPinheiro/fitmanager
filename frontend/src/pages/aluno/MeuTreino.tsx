@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './MeuTreino.css';
+import { getCurrentUser, getToken } from "../../services/authService";
 
 const API_BASE = 'https://fitmanagerapi-production.up.railway.app';
 
@@ -43,90 +44,91 @@ const LETRAS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 
 function MeuTreino() {
-  const navigate = useNavigate();
-  const [treinoInfo, setTreinoInfo] = useState<TreinoInfo | null>(null);
-  const [sessoes, setSessoes] = useState<Sessao[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [erro, setErro] = useState('');
+     const navigate = useNavigate();
+     const [treinoInfo, setTreinoInfo] = useState<TreinoInfo | null>(null);
+     const [sessoes, setSessoes] = useState<Sessao[]>([]);
+     const [loading, setLoading] = useState(true);
+     const [erro, setErro] = useState('');
 
   useEffect(() => {
     const fetchTreino = async () => {
-      try {
-        const alunoId = localStorage.getItem('alunoId');
-        const token = localStorage.getItem('token') ?? '';
+          try {
+               const user = getCurrentUser();
+               const token = getToken() ?? "";
 
-        if (!alunoId) {
-          setErro('Sessão expirada. Faça login novamente.');
-          setLoading(false);
-          return;
-        }
+               if (!user) {
+               setErro("Sessão expirada. Faça login novamente.");
+               setLoading(false);
+               return;
+               }
 
-        
-        const { data: infoData } = await axios.get<TreinoInfo>(
-          `${API_BASE}/api/v1/alunos/${alunoId}/treino`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+               const alunoId = user.id;
+          
+               const { data: infoData } = await axios.get<TreinoInfo>(
+                    `${API_BASE}/api/v1/alunos/${alunoId}/treino`,
+                    { headers: { Authorization: `Bearer ${token}` } }
+               );
 
-        setTreinoInfo(infoData);
+               setTreinoInfo(infoData);
 
-        
-        const { data: sessoesData } = await axios.get<{ treinoId: number; sessoes: Sessao[] }>(
-          `${API_BASE}/api/v1/treinos/${infoData.treinoId}/sessoes`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+               
+               const { data: sessoesData } = await axios.get<{ treinoId: number; sessoes: Sessao[] }>(
+                    `${API_BASE}/api/v1/treinos/${infoData.treinoId}/sessoes`,
+                    { headers: { Authorization: `Bearer ${token}` } }
+               );
 
-        const sessoesOrdenadas = (sessoesData.sessoes ?? []).sort(
-          (a, b) => (a.ordem ?? 0) - (b.ordem ?? 0)
-        );
+               const sessoesOrdenadas = (sessoesData.sessoes ?? []).sort(
+                    (a, b) => (a.ordem ?? 0) - (b.ordem ?? 0)
+               );
 
-        setSessoes(sessoesOrdenadas);
+               setSessoes(sessoesOrdenadas);
 
-      } catch (err: unknown) {
-        if (axios.isAxiosError(err)) {
-          const msg = err.response?.data?.message;
-          setErro(msg ?? `Erro ${err.response?.status ?? 'de conexão'}`);
-        } else {
-          setErro('Erro inesperado ao carregar treino.');
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
+               } catch (err: unknown) {
+               if (axios.isAxiosError(err)) {
+                    const msg = err.response?.data?.message;
+                    setErro(msg ?? `Erro ${err.response?.status ?? 'de conexão'}`);
+               } else {
+                    setErro('Erro inesperado ao carregar treino.');
+               }
+               } finally {
+               setLoading(false);
+               }
+     };
 
-    fetchTreino();
-  }, []);
+     fetchTreino();
+     }, []);
 
-  
-  if (loading) {
-    return (
-      <div className="mt-loading">
-        <div className="mt-spinner" />
-        <p>Carregando treino...</p>
-      </div>
-    );
-  }
+     
+     if (loading) {
+          return (
+               <div className="mt-loading">
+               <div className="mt-spinner" />
+               <p>Carregando treino...</p>
+               </div>
+          );
+     }
 
-  if (erro && !treinoInfo) {
-    return (
-      <div className="mt-loading">
-        <p className="mt-erro-msg">{erro}</p>
-        <button className="mt-btn-retry" onClick={() => navigate('/aluno-dashboard')}>
-          ← Voltar ao Dashboard
-        </button>
-      </div>
-    );
-  }
+     if (erro && !treinoInfo) {
+          return (
+               <div className="mt-loading">
+               <p className="mt-erro-msg">{erro}</p>
+               <button className="mt-btn-retry" onClick={() => navigate('/aluno-dashboard')}>
+                    ← Voltar ao Dashboard
+               </button>
+               </div>
+          );
+     }
 
-  if (!treinoInfo) {
-    return (
-      <div className="mt-loading">
-        <p>Nenhum treino encontrado.</p>
-        <button className="mt-btn-retry" onClick={() => navigate('/aluno-dashboard')}>
-          ← Voltar ao Dashboard
-        </button>
-      </div>
-    );
-  }
+     if (!treinoInfo) {
+          return (
+               <div className="mt-loading">
+               <p>Nenhum treino encontrado.</p>
+               <button className="mt-btn-retry" onClick={() => navigate('/aluno-dashboard')}>
+                    ← Voltar ao Dashboard
+               </button>
+               </div>
+          );
+     }
 
   return (
     <div className="mt-wrapper">
