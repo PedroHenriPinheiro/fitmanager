@@ -8,6 +8,8 @@ import barbell from './icons/barbell.svg';
 import time from './icons/time.svg';
 import user from './icons/user.svg';
 
+import { removeToken } from "../../services/authService";
+
 const API_BASE = 'https://fitmanagerapi-production.up.railway.app';
 
 interface Sessao {
@@ -64,6 +66,9 @@ function AlunoDashboard() {
         <div>
           <h1>UNIFOR GYM</h1>
           <p>Bem-vindo, {nomeAluno || 'aluno'}</p>
+          <button onClick={removeToken}>
+            Sair
+          </button>
         </div>
         <div>
           <img src={user} className='user' alt="Ícone do perfil" />
