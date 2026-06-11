@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './AlunoDashboard.css';
-import ChatBot from './Chatbot';
+import ChatBot from '../aluno/Chatbot';
 
 import barbell from './icons/barbell.svg';
 import time from './icons/time.svg';
