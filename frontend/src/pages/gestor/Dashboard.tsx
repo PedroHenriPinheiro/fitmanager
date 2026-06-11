@@ -4,6 +4,7 @@ import "./styles.css"
 import CriarAluno from './CriarAluno';
 import EditarUsuario from './EditarUsuario';
 import Confirmar from './Confirmar';
+import { removeToken } from "../../services/authService";
 
 const cliente = axios.create({
      baseURL: 'https://fitmanagerapi-production.up.railway.app/api/v1/',
@@ -156,6 +157,9 @@ function GestorDashboard() {
                <div className='header'>
                     <h1>UNIFOR GYM - Gerenciamento</h1>
                     <h2>Painel Administrativo</h2>
+                    <button onClick={removeToken}>
+                         Sair
+                    </button>
                </div>
                
 
