@@ -66,12 +66,12 @@ function AlunoDashboard() {
         <div>
           <h1>UNIFOR GYM</h1>
           <p>Bem-vindo, {nomeAluno || 'aluno'}</p>
-          <button onClick={removeToken}>
+        </div>
+        <div className='header-aluno-perfil'>
+          <img src={user} className='user' alt="Ícone do perfil" />
+          <button className='botao-logout-aluno' onClick={removeToken}>
             Sair
           </button>
-        </div>
-        <div>
-          <img src={user} className='user' alt="Ícone do perfil" />
         </div>
       </div>
 

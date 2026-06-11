@@ -154,12 +154,17 @@ function GestorDashboard() {
                     </div>
                }
 
-               <div className='header'>
+               <div className='header-admin'>
+                    <div>
                     <h1>UNIFOR GYM - Gerenciamento</h1>
                     <h2>Painel Administrativo</h2>
-                    <button onClick={removeToken}>
+                    </div>
+                    <div>
+<button className='botao-logout-admin' onClick={removeToken}>
                          Sair
                     </button>
+                    </div>
+                    
                </div>
                
 
