@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import './ChatBot.css';
+import './Chatbot.css';
 
 const GEMINI_KEY = import.meta.env.VITE_GEMINI_KEY ?? '';
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${GEMINI_KEY}`;
